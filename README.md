@@ -10,3 +10,5 @@ Calling the C binary:\
 \
 `./enc input.pcm out.cat`\
 `./dec out.cat output.pcm`
+
+There is an example encoded file inside this repo, named out.cat
