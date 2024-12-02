@@ -1,6 +1,7 @@
 # Kočkodek
 Audio codec (with C port by ChatGPT hehe)
 \
+Bitrate is 12.8 kbps\
 \
 Uses DPCM and ternary
 \
