@@ -12,3 +12,5 @@ Calling the C binary:\
 `./dec out.cat output.pcm`
 
 There is an example encoded file inside this repo, named out.cat, sampled at 8 khz rate
+
+Use tcc to compile this codec, with the `-lm` flag
