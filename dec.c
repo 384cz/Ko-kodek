@@ -44,9 +44,9 @@ int main(int argc, char *argv[]) {
 
             amp *= 0.9;
             if (trit == 1) {
-                amp += 1.0;
+                amp += 3.0;
             } else if (trit == 2) {
-                amp -= 1.0;
+                amp -= 3.0;
             }
             fd[fd_index++] = amp;
         }
