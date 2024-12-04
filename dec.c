@@ -9,26 +9,50 @@
 
 int main(int argc, char *argv[]) {
     if (argc < 3) {
-        printf("Usage: %s input.pcm output.pcm\n", argv[0]);
+        fprintf(stderr,"Usage: %s input.pcm output.pcm\n", argv[0]);
         return 1;
     }
 
     FILE *input = fopen(argv[1], "rb");
     FILE *output = fopen(argv[2], "wb");
     if (!input || !output) {
-        printf("Error opening files.\n");
+        fprintf(stderr,"Error opening files.\n");
         return 1;
     }
 
     fseek(input, 0, SEEK_END);
-    long data_length = ftell(input)*5;
+    long data_length = ftell(input);
     rewind(input);
 
+    
+    fprintf(stderr,"[DEBUG] Attempting to allocate %ld bytes for data\n", data_length);
     uint8_t *data = (uint8_t *)malloc(data_length);
-    fread(data, 1, data_length, input);
+    if (!data) {
+        fprintf(stderr, "[ERROR] Failed to allocate memory for data.\n");
+        return 1;
+    }
+    fprintf(stderr,"[DEBUG] Successfully allocated memory for data\n");
+    
+    
+    size_t read_size = fread(data, 1, data_length, input);
+    if (read_size != data_length) {
+        fprintf(stderr, "[ERROR] Only %ld bytes read, expected %ld\n", read_size, data_length);
+        free(data);
+        return 1;
+    }
+    fprintf(stderr,"[DEBUG] Successfully read %ld bytes from input file\n", read_size);
+    
 
     float amp = 128.0;
-    float *fd = malloc(data_length * 5 * sizeof(float));
+    
+    fprintf(stderr,"[DEBUG] Attempting to allocate %ld bytes for fd\n", data_length * 5 * sizeof(float));
+    float *fd = malloc(data_length *5* sizeof(float));
+    if (!fd) {
+        fprintf(stderr, "[ERROR] Failed to allocate memory for fd.\n");
+        return 1;
+    }
+    fprintf(stderr,"[DEBUG] Successfully allocated memory for fd\n");
+    
 	if (!fd) {
 		fprintf(stderr, "Memory allocation failed\n");
 		return 1;
@@ -52,7 +76,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    uint8_t final_output[data_length];
+    uint8_t final_output[data_length*5];
     int output_index = 0;
 
     amp = 128.0;
